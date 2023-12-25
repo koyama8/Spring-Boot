@@ -35,7 +35,7 @@ public class MedicoController {
     //Converte pra uma lista de Medico para DadosListagemMedico
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size=10,sort={"nome"}) Pageable paginacao){
-      return repository.findAll(paginacao).map(DadosListagemMedico::new);
+      return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
     }
 
     @PutMapping
@@ -45,6 +45,22 @@ public class MedicoController {
        medico.atualizarInformacoes(dados);
     }
 
-    
+    /**
 
+     - metodo que excluir diretamento do banco
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+         repository.deleteById(id);
+   }
+    */
+
+     //Exclusão Lógica
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+        var medico = repository.getReferenceById(id);
+         medico.excluir();
+    }
 }
